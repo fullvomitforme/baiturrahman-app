@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.next/
 frontend/node_modules/
 frontend/.next/
 frontend/.bun/
