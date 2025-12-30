@@ -58,33 +58,33 @@
 
 /* Dark Mode - Optimized for night prayers */
 .dark {
-  --background: 15 23 42; /* #0F172A - Deep navy */
-  --foreground: 241 245 249; /* #F1F5F9 - Light gray */
+    --background: 15 23 42; /* #0F172A - Deep navy */
+    --foreground: 241 245 249; /* #F1F5F9 - Light gray */
 
-  --card: 30 41 59; /* #1E293B */
-  --card-foreground: 241 245 249;
+    --card: 30 41 59; /* #1E293B */
+    --card-foreground: 241 245 249;
 
-  --popover: 30 41 59;
-  --popover-foreground: 241 245 249;
+    --popover: 30 41 59;
+    --popover-foreground: 241 245 249;
 
-  --primary: 5 150 105; /* Emerald - stays vibrant in dark */
-  --primary-foreground: 255 255 255;
+    --primary: 5 150 105; /* Emerald - stays vibrant in dark */
+    --primary-foreground: 255 255 255;
 
-  --secondary: 245 158 11; /* Gold */
-  --secondary-foreground: 15 23 42;
+    --secondary: 245 158 11; /* Gold */
+    --secondary-foreground: 15 23 42;
 
-  --accent: 30 64 175; /* Deep blue */
-  --accent-foreground: 255 255 255;
+    --accent: 30 64 175; /* Deep blue */
+    --accent-foreground: 255 255 255;
 
-  --muted: 51 65 85; /* #334155 */
-  --muted-foreground: 148 163 184; /* #94A3B8 */
+    --muted: 51 65 85; /* #334155 */
+    --muted-foreground: 148 163 184; /* #94A3B8 */
 
-  --destructive: 239 68 68;
-  --destructive-foreground: 255 255 255;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
 
-  --border: 51 65 85; /* #334155 */
-  --input: 51 65 85;
-  --ring: 5 150 105; /* Emerald ring */
+    --border: 51 65 85; /* #334155 */
+    --input: 51 65 85;
+    --ring: 5 150 105; /* Emerald ring */
 }
 
 /* Tailwind v4 Theme Configuration */

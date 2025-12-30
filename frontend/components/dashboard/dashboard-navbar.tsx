@@ -79,6 +79,7 @@ export function DashboardNavbar() {
 			return response.data?.data || response.data;
 		},
 		retry: false,
+		enabled: typeof window !== 'undefined' && !!localStorage.getItem('token'),
 	});
 
 	return (

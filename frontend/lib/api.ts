@@ -32,9 +32,15 @@ api.interceptors.response.use(
 	(error) => {
 		if (error.response?.status === 401) {
 			// Unauthorized - clear token and redirect to login
+			// Only redirect if not already on login page to avoid redirect loops
 			if (typeof window !== 'undefined') {
-				localStorage.removeItem('token');
-				window.location.href = '/login';
+				const currentPath = window.location.pathname;
+				if (!currentPath.startsWith('/login')) {
+					localStorage.removeItem('token');
+					// Clear cookie as well
+					document.cookie = 'token=; path=/; max-age=0; SameSite=Lax';
+					window.location.href = '/login';
+				}
 			}
 		}
 		return Promise.reject(error);

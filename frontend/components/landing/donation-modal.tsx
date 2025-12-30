@@ -221,11 +221,11 @@ export function DonationModal() {
                     <SelectValue placeholder="Pilih metode pembayaran (opsional)" />
                   </SelectTrigger>
                   <SelectContent>
-                    {activeMethods.map((method: any) => (
+                  {activeMethods.map((method: any) => (
                       <SelectItem key={method.id} value={method.id}>
-                        {method.name}
+                      {method.name}
                       </SelectItem>
-                    ))}
+                  ))}
                   </SelectContent>
                 </Select>
               </div>

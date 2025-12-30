@@ -13,7 +13,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Building2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { Toaster } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -40,15 +39,22 @@ export default function LoginPage() {
       const response = await api.post("/auth/login", data);
       if (response.data?.data?.access_token || response.data?.access_token) {
         const token = response.data?.data?.access_token || response.data?.access_token;
+        
+        // Store token in both localStorage and cookie for middleware
         localStorage.setItem("token", token);
+        document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
+        
         toast.success("Login berhasil!");
-        router.push("/dashboard");
+        
+        // Use window.location for reliable redirect
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 500);
       }
     } catch (error: any) {
       toast.error(
         error.response?.data?.error || "Email atau password salah"
       );
-    } finally {
       setIsLoading(false);
     }
   };
@@ -135,7 +141,6 @@ export default function LoginPage() {
           </CardContent>
         </Card>
       </motion.div>
-      <Toaster position="top-right" richColors />
     </div>
   );
 }

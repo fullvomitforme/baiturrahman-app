@@ -49,6 +49,7 @@ export function DashboardSidebar() {
       return response.data?.data || response.data;
     },
     retry: false,
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
   });
 
   const handleLogout = () => {
@@ -119,10 +120,12 @@ export function DashboardSidebar() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Button
-                    variant={isActive ? "secondary" : "ghost"}
+                    variant="ghost"
                     className={cn(
-                      "w-full justify-start gap-3 min-h-[48px]",
-                      isActive && "bg-primary/10 text-primary border-l-4 border-primary"
+                      "w-full justify-start gap-3 min-h-[48px] transition-all duration-200",
+                      isActive 
+                        ? "bg-primary/15 text-primary border-l-4 border-primary font-semibold shadow-sm" 
+                        : "hover:bg-primary/5 hover:text-primary"
                     )}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />

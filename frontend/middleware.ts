@@ -7,8 +7,12 @@ export function middleware(request: NextRequest) {
   const isLoginRoute = request.nextUrl.pathname === "/login";
 
   // If accessing dashboard without token, redirect to login
+  // Only redirect if not already redirecting to avoid loops
   if (isDashboardRoute && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    // Add return URL to preserve intended destination
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   // If accessing login with token, redirect to dashboard

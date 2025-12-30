@@ -27,7 +27,11 @@ export default function DashboardPage() {
       const response = await api.get("/auth/me");
       return response.data?.data || response.data;
     },
+    retry: false,
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
   });
+
+  const hasToken = typeof window !== "undefined" && !!localStorage.getItem("token");
 
   const { data: stats } = useQuery({
     queryKey: ["dashboard", "stats"],
@@ -43,6 +47,8 @@ export default function DashboardPage() {
         announcements: announcementsRes.data?.data || announcementsRes.data,
       };
     },
+    retry: false,
+    enabled: hasToken,
   });
 
   const { data: recentDonations } = useQuery({
@@ -51,6 +57,8 @@ export default function DashboardPage() {
       const response = await api.get("/admin/donations?limit=10");
       return response.data?.data || response.data;
     },
+    retry: false,
+    enabled: hasToken,
   });
 
   const greeting = user?.full_name

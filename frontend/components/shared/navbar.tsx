@@ -73,11 +73,11 @@ export function Navbar() {
               className="font-heading text-xl md:text-2xl font-bold bg-gradient-to-r from-primary via-primary to-primary/80 bg-clip-text text-transparent"
               whileHover={{ scale: 1.02 }}
             >
-              Masjid Baiturrahim
+            Masjid Baiturrahim
             </motion.span>
             <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">
               Pusat Kegiatan Islam
-            </span>
+          </span>
           </div>
         </Link>
 
@@ -86,9 +86,9 @@ export function Navbar() {
           {navItems.map((item, index) => {
             const isActive = pathname === item.href;
             return (
-              <Link
-                key={item.href}
-                href={item.href}
+            <Link
+              key={item.href}
+              href={item.href}
                 className="relative group"
               >
                 <motion.div
@@ -97,29 +97,29 @@ export function Navbar() {
                   className="relative px-4 py-2 rounded-lg transition-colors"
                 >
                   <span
-                    className={cn(
+              className={cn(
                       "relative z-10 text-sm font-semibold transition-colors duration-300",
                       isActive
-                        ? "text-primary"
+                  ? "text-primary"
                         : "text-muted-foreground group-hover:text-foreground"
-                    )}
-                  >
-                    {item.label}
+              )}
+            >
+              {item.label}
                   </span>
                   {isActive && (
-                    <motion.div
+                <motion.div
                       layoutId="activeNavItem"
                       className="absolute inset-0 bg-primary/10 rounded-lg border border-primary/20"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
                   <motion.div
                     className="absolute inset-0 bg-primary/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     initial={false}
                   />
                 </motion.div>
-              </Link>
+            </Link>
             );
           })}
         </div>
@@ -129,13 +129,13 @@ export function Navbar() {
           {/* Theme Toggle */}
           {mounted && (
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 className="h-10 w-10 rounded-xl border border-border/50 bg-background/50 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
-                aria-label="Toggle theme"
-              >
+            aria-label="Toggle theme"
+          >
                 <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-foreground" />
                 <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-foreground" />
               </Button>
@@ -150,7 +150,7 @@ export function Navbar() {
                 className="h-10 px-6 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 font-semibold"
               >
                 Login
-              </Button>
+          </Button>
             </motion.div>
           </Link>
 
@@ -182,11 +182,11 @@ export function Navbar() {
                         exit={{ rotate: -90, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5" />
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </Button>
+              </Button>
               </motion.div>
             </SheetTrigger>
             <SheetContent
@@ -208,10 +208,10 @@ export function Navbar() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
                           "relative flex items-center px-4 py-3 rounded-xl text-base font-semibold transition-all duration-300 group",
                           isActive
                             ? "bg-primary/10 text-primary border border-primary/20"
@@ -230,7 +230,7 @@ export function Navbar() {
                         <motion.div
                           className="ml-auto opacity-0 group-hover:opacity-100"
                           initial={false}
-                        >
+                  >
                           <motion.div
                             animate={{ x: [0, 4, 0] }}
                             transition={{ repeat: Infinity, duration: 1.5 }}

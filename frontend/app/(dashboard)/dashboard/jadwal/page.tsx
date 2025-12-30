@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,18 +25,30 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function JadwalPage() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [calendarMonth, setCalendarMonth] = useState<Date>(today);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
+  // Memoize date string to ensure stable query key
+  const dateString = useMemo(
+    () => format(selectedDate, "yyyy-MM-dd"),
+    [selectedDate]
+  );
+
   const { data: prayerTimes, isLoading } = useQuery({
-    queryKey: ["prayer-times", selectedDate],
+    queryKey: ["prayer-times", dateString],
     queryFn: async () => {
-      const response = await api.get(
-        `/prayer-times?date=${format(selectedDate, "yyyy-MM-dd")}`
-      );
+      const response = await api.get(`/prayer-times?date=${dateString}`);
       return response.data?.data || response.data;
     },
+    enabled: !!selectedDate,
   });
 
   if (isLoading) {
@@ -83,8 +95,20 @@ export default function JadwalPage() {
             <Calendar
               mode="single"
               selected={selectedDate}
-              onSelect={(date) => date && setSelectedDate(date)}
+              month={calendarMonth}
+              onMonthChange={setCalendarMonth}
+              onSelect={(date) => {
+                if (date) {
+                  // Normalize date to start of day to avoid timezone issues
+                  const normalizedDate = new Date(date);
+                  normalizedDate.setHours(0, 0, 0, 0);
+                  setSelectedDate(normalizedDate);
+                  // Update calendar month to show the selected date's month
+                  setCalendarMonth(normalizedDate);
+                }
+              }}
               className="rounded-md border"
+              initialFocus
             />
           </CardContent>
         </Card>
