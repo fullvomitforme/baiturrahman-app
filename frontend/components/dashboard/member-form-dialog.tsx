@@ -47,6 +47,10 @@ export function MemberFormDialog({
 }: MemberFormDialogProps) {
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    console.log("MemberFormDialog - open:", open, "member:", member);
+  }, [open, member]);
+
   const {
     register,
     handleSubmit,
@@ -97,6 +101,7 @@ export function MemberFormDialog({
       }
       return api.post("/admin/structure", data);
     },
+    retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["structure"] });
       toast.success(member ? "Anggota berhasil diupdate" : "Anggota berhasil ditambahkan");
@@ -104,11 +109,18 @@ export function MemberFormDialog({
       reset();
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.error || "Terjadi kesalahan");
+      const errorMessage = 
+        error.response?.data?.error || 
+        error.response?.data?.message ||
+        error.message ||
+        "Terjadi kesalahan saat menyimpan anggota";
+      console.error("Member save error:", error);
+      toast.error(errorMessage);
     },
   });
 
   const onSubmit = (data: MemberForm) => {
+    console.log("Submitting member form:", data);
     mutation.mutate(data);
   };
 
@@ -195,8 +207,8 @@ export function MemberFormDialog({
             >
               Batal
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Menyimpan..." : "Simpan"}
+            <Button type="submit" disabled={isSubmitting || mutation.isPending}>
+              {isSubmitting || mutation.isPending ? "Menyimpan..." : "Simpan"}
             </Button>
           </div>
         </form>

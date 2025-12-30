@@ -47,6 +47,10 @@ export function ContentEditorDialog({
   const queryClient = useQueryClient();
   const [bodyContent, setBodyContent] = useState("");
 
+  useEffect(() => {
+		console.log('ContentEditorDialog - open:', open, 'content:', content);
+	}, [open, content]);
+
   const {
     register,
     handleSubmit,
@@ -89,105 +93,112 @@ export function ContentEditorDialog({
 
   const mutation = useMutation({
     mutationFn: async (data: ContentForm) => {
-      if (content) {
-        return api.put(`/admin/content/${content.id}`, { ...data, body: bodyContent });
-      }
-      return api.post("/admin/content", { ...data, body: bodyContent });
+      const payload = { ...data, body: bodyContent };
+			if (content) {
+				return api.put(`/admin/content/${content.id}`, payload);
+			}
+      return api.post("/admin/content", payload);
     },
-    onSuccess: () => {
+    retry: false,
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["content", "sections"] });
       toast.success(content ? "Konten berhasil diupdate" : "Konten berhasil dibuat");
       onOpenChange(false);
       reset();
+      setBodyContent('');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.error || "Terjadi kesalahan");
+      const errorMessage =
+				error.response?.data?.error ||
+				error.response?.data?.message ||
+				error.message ||
+				'Terjadi kesalahan saat menyimpan konten';
+			console.error('Content save error:', error);
+			toast.error(errorMessage);
     },
   });
 
   const onSubmit = (data: ContentForm) => {
+    console.log('Submitting content form:', { ...data, body: bodyContent });
     mutation.mutate({ ...data, body: bodyContent });
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="font-heading">
-            {content ? "Edit Konten" : "Tambah Konten"}
-          </DialogTitle>
-          <DialogDescription>
-            Kelola konten untuk halaman website
-          </DialogDescription>
-        </DialogHeader>
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent className='max-w-4xl max-h-[90vh] overflow-y-auto'>
+				<DialogHeader>
+					<DialogTitle className='font-heading'>
+						{content ? 'Edit Konten' : 'Tambah Konten'}
+					</DialogTitle>
+					<DialogDescription>
+						Kelola konten untuk halaman website
+					</DialogDescription>
+				</DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="section_key">Section Key *</Label>
-            <Input
-              id="section_key"
-              {...register("section_key")}
-              placeholder="hero, about, vision, facilities"
-              disabled={!!content}
-            />
-            {errors.section_key && (
-              <p className="text-sm text-destructive">
-                {errors.section_key.message}
-              </p>
-            )}
-          </div>
+				<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+					<div className='space-y-2'>
+						<Label htmlFor='section_key'>Section Key *</Label>
+						<Input
+							id='section_key'
+							{...register('section_key')}
+							placeholder='hero, about, vision, facilities'
+							disabled={!!content}
+						/>
+						{errors.section_key && (
+							<p className='text-sm text-destructive'>
+								{errors.section_key.message}
+							</p>
+						)}
+					</div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Judul</Label>
-              <Input id="title" {...register("title")} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="subtitle">Subjudul</Label>
-              <Input id="subtitle" {...register("subtitle")} />
-            </div>
-          </div>
+					<div className='grid grid-cols-2 gap-4'>
+						<div className='space-y-2'>
+							<Label htmlFor='title'>Judul</Label>
+							<Input id='title' {...register('title')} />
+						</div>
+						<div className='space-y-2'>
+							<Label htmlFor='subtitle'>Subjudul</Label>
+							<Input id='subtitle' {...register('subtitle')} />
+						</div>
+					</div>
 
-          <div className="space-y-2">
-            <Label>Konten</Label>
-            <RichTextEditor
-              value={bodyContent}
-              onChange={setBodyContent}
-            />
-          </div>
+					<div className='space-y-2'>
+						<Label>Konten</Label>
+						<RichTextEditor value={bodyContent} onChange={setBodyContent} />
+					</div>
 
-          <div className="space-y-2">
-            <Label>Gambar</Label>
-            <ImageUpload
-              value={watch("image_url")}
-              onChange={(url) => setValue("image_url", url)}
-            />
-          </div>
+					<div className='space-y-2'>
+						<Label>Gambar</Label>
+						<ImageUpload
+							value={watch('image_url')}
+							onChange={(url) => setValue('image_url', url)}
+						/>
+					</div>
 
-          <div className="space-y-2">
-            <Label htmlFor="video_url">URL Video</Label>
-            <Input
-              id="video_url"
-              {...register("video_url")}
-              placeholder="https://youtube.com/..."
-            />
-          </div>
+					<div className='space-y-2'>
+						<Label htmlFor='video_url'>URL Video</Label>
+						<Input
+							id='video_url'
+							{...register('video_url')}
+							placeholder='https://youtube.com/...'
+						/>
+					</div>
 
-          <div className="flex justify-end gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Batal
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Menyimpan..." : "Simpan"}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
+					<div className='flex justify-end gap-4'>
+						<Button
+							type='button'
+							variant='outline'
+							onClick={() => onOpenChange(false)}
+						>
+							Batal
+						</Button>
+						<Button type='submit' disabled={isSubmitting || mutation.isPending}>
+							{isSubmitting || mutation.isPending ? 'Menyimpan...' : 'Simpan'}
+						</Button>
+					</div>
+				</form>
+			</DialogContent>
+		</Dialog>
+	);
 }
 

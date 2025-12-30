@@ -32,7 +32,16 @@ export function EmptyState({
       <h3 className="font-heading text-xl font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground max-w-md mb-6">{description}</p>
       {actionLabel && onAction && (
-        <Button onClick={onAction}>{actionLabel}</Button>
+        <Button 
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onAction();
+          }}
+        >
+          {actionLabel}
+        </Button>
       )}
     </div>
   );

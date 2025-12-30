@@ -43,8 +43,10 @@ export default function ContentPage() {
   };
 
   const handleAdd = () => {
+    console.log('handleAdd called');
     setEditingContent(null);
     setIsDialogOpen(true);
+    console.log('isDialogOpen set to true');
   };
 
   if (isLoading) {
@@ -70,88 +72,101 @@ export default function ContentPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-3xl font-bold">Kelola Konten</h1>
-          <p className="text-muted-foreground mt-1">
-            Kelola konten untuk halaman website
-          </p>
-        </div>
-        <Button onClick={handleAdd}>
-          <Plus className="h-4 w-4 mr-2" />
-          Tambah Konten
-        </Button>
-      </div>
+		<div className='space-y-6'>
+			<div className='flex items-center justify-between'>
+				<div>
+					<h1 className='font-heading text-3xl font-bold'>Kelola Konten</h1>
+					<p className='text-muted-foreground mt-1'>
+						Kelola konten untuk halaman website
+					</p>
+				</div>
+				<Button
+					type='button'
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						handleAdd();
+					}}
+				>
+					<Plus className='h-4 w-4 mr-2' />
+					Tambah Konten
+				</Button>
+			</div>
 
-      <div className="grid gap-4">
-        {contents.map((content: any, index: number) => (
-          <motion.div
-            key={content.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <GripVertical className="h-5 w-5 text-muted-foreground cursor-move" />
-                    <div>
-                      <CardTitle className="font-heading">
-                        {content.title || content.section_key}
-                      </CardTitle>
-                      {content.subtitle && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {content.subtitle}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <Label htmlFor={`active-${content.id}`} className="text-sm">
-                        Aktif
-                      </Label>
-                      <Switch
-                        id={`active-${content.id}`}
-                        checked={content.is_active}
-                        onCheckedChange={(checked) =>
-                          toggleActive.mutate({
-                            id: content.id,
-                            isActive: checked,
-                          })
-                        }
-                      />
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(content)}
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              {content.body && (
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {content.body.replace(/<[^>]*>/g, "").substring(0, 150)}...
-                  </p>
-                </CardContent>
-              )}
-            </Card>
-          </motion.div>
-        ))}
-      </div>
+			<div className='grid gap-4'>
+				{contents.map((content: any, index: number) => (
+					<motion.div
+						key={content.id}
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: index * 0.1 }}
+					>
+						<Card className='hover:shadow-lg transition-shadow'>
+							<CardHeader>
+								<div className='flex items-center justify-between'>
+									<div className='flex items-center gap-3'>
+										<GripVertical className='h-5 w-5 text-muted-foreground cursor-move' />
+										<div>
+											<CardTitle className='font-heading'>
+												{content.title || content.section_key}
+											</CardTitle>
+											{content.subtitle && (
+												<p className='text-sm text-muted-foreground mt-1'>
+													{content.subtitle}
+												</p>
+											)}
+										</div>
+									</div>
+									<div className='flex items-center gap-4'>
+										<div className='flex items-center gap-2'>
+											<Label
+												htmlFor={`active-${content.id}`}
+												className='text-sm'
+											>
+												Aktif
+											</Label>
+											<Switch
+												id={`active-${content.id}`}
+												checked={content.is_active}
+												onCheckedChange={(checked) =>
+													toggleActive.mutate({
+														id: content.id,
+														isActive: checked,
+													})
+												}
+											/>
+										</div>
+										<Button
+											variant='outline'
+											size='sm'
+											onClick={() => handleEdit(content)}
+										>
+											<Edit className='h-4 w-4 mr-2' />
+											Edit
+										</Button>
+									</div>
+								</div>
+							</CardHeader>
+							{content.body && (
+								<CardContent>
+									<p className='text-sm text-muted-foreground line-clamp-2'>
+										{content.body.replace(/<[^>]*>/g, '').substring(0, 150)}...
+									</p>
+								</CardContent>
+							)}
+						</Card>
+					</motion.div>
+				))}
+			</div>
 
-      <ContentEditorDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        content={editingContent}
-      />
-    </div>
-  );
+			<ContentEditorDialog
+				open={isDialogOpen}
+				onOpenChange={(open) => {
+					console.log('ContentEditorDialog onOpenChange:', open);
+					setIsDialogOpen(open);
+				}}
+				content={editingContent}
+			/>
+		</div>
+	);
 }

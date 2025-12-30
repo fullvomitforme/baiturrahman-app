@@ -32,27 +32,28 @@ export function RichTextEditor({
   className,
 }: RichTextEditorProps) {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Image.configure({
-        inline: true,
-        allowBase64: true,
-      }),
-      Link.configure({
-        openOnClick: false,
-      }),
-    ],
-    content: value,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-    editorProps: {
-      attributes: {
-        class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[200px] p-4",
-      },
-    },
-  });
+		extensions: [
+			StarterKit,
+			Image.configure({
+				inline: true,
+				allowBase64: true,
+			}),
+			Link.configure({
+				openOnClick: false,
+			}),
+		],
+		content: value,
+		immediatelyRender: false,
+		onUpdate: ({ editor }) => {
+			onChange(editor.getHTML());
+		},
+		editorProps: {
+			attributes: {
+				class:
+					'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[200px] p-4',
+			},
+		},
+	});
 
   if (!editor) {
     return null;

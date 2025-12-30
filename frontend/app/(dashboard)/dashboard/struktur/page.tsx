@@ -50,8 +50,10 @@ export default function StrukturPage() {
   };
 
   const handleAdd = () => {
+    console.log("handleAdd called");
     setEditingMember(null);
     setIsDialogOpen(true);
+    console.log("isDialogOpen set to true");
   };
 
   const handleDelete = (id: string) => {
@@ -89,7 +91,14 @@ export default function StrukturPage() {
             Kelola struktur organisasi masjid
           </p>
         </div>
-        <Button onClick={handleAdd}>
+        <Button 
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleAdd();
+          }}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Tambah Anggota
         </Button>
@@ -168,7 +177,10 @@ export default function StrukturPage() {
 
       <MemberFormDialog
         open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
+        onOpenChange={(open) => {
+          console.log("MemberFormDialog onOpenChange:", open);
+          setIsDialogOpen(open);
+        }}
         member={editingMember}
       />
 
