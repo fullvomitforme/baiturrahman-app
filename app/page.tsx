@@ -1,63 +1,111 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div className="min-h-screen bg-background">
+      <main className="container-islamic section-spacing">
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl md:text-5xl font-heading text-primary">
+              Web Masjid
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Modern masjid web application with Islamic-inspired design system
+            </p>
+          </div>
+
+          {/* Design System Demo */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {/* Colors Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-heading">Color Palette</CardTitle>
+                <CardDescription>
+                  Islamic-inspired color scheme
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded bg-primary"></div>
+                    <span className="text-sm">Primary (Emerald)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded bg-secondary"></div>
+                    <span className="text-sm">Secondary (Gold)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded bg-accent"></div>
+                    <span className="text-sm">Accent (Deep Blue)</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Typography Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-heading">Typography</CardTitle>
+                <CardDescription>
+                  Arabic-friendly fonts
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="font-heading text-lg">Heading Font (Amiri/Cairo)</p>
+                  <p className="font-body text-sm text-muted-foreground">
+                    Body Font (Inter)
+                  </p>
+                </div>
+                <div className="arabic text-sm">
+                  <p>نص عربي - Arabic Text Support</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Components Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-heading">Components</CardTitle>
+                <CardDescription>
+                  shadcn/ui components ready
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <Badge>Badge</Badge>
+                  <Badge variant="secondary">Secondary</Badge>
+                  <Badge variant="outline">Outline</Badge>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm">Button</Button>
+                  <Button variant="secondary" size="sm">Secondary</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Features */}
+          <Card className="pattern-islamic">
+            <CardHeader>
+              <CardTitle className="font-heading">Design Principles</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm">
+                <li>✓ Mobile-first responsive (90% users akan pakai HP)</li>
+                <li>✓ High contrast for readability (penting untuk jamaah usia lanjut)</li>
+                <li>✓ Large touch targets (min 44x44px)</li>
+                <li>✓ Generous whitespace</li>
+                <li>✓ Islamic geometric patterns (subtle)</li>
+                <li>✓ Smooth animations (60fps)</li>
+                <li>✓ Dark mode optimized for night prayers</li>
+                <li>✓ RTL support ready (untuk teks Arab)</li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
