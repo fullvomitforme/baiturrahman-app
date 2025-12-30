@@ -1,4 +1,5 @@
 import { HeroSection } from '@/components/landing/hero-section';
+import { ActivitiesBannerCarousel } from '@/components/landing/activities-banner-carousel';
 import { PrayerTimesWidget } from '@/components/landing/prayer-times-widget';
 import { AboutSection } from '@/components/landing/about-section';
 import { UpcomingEvents } from '@/components/landing/upcoming-events';
@@ -13,6 +14,7 @@ export default function HomePage() {
 	return (
 		<div className='flex flex-col'>
 			<HeroSection />
+			<ActivitiesBannerCarousel />
 			<PrayerTimesWidget />
 			<AboutSection />
 			<UpcomingEvents />

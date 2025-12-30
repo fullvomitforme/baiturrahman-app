@@ -15,7 +15,9 @@ export function OrganizationPreview() {
     queryKey: ["structure", "preview"],
     queryFn: async () => {
       const response = await api.get("/structure?limit=3");
-      return response.data || [];
+      // Handle both response formats: { data: [...] } or [...]
+      const data = response.data?.data || response.data;
+      return Array.isArray(data) ? data : [];
     },
   });
 
@@ -37,7 +39,7 @@ export function OrganizationPreview() {
     );
   }
 
-  if (!structures || structures.length === 0) {
+  if (!structures || !Array.isArray(structures) || structures.length === 0) {
     return null;
   }
 
@@ -107,7 +109,7 @@ export function OrganizationPreview() {
         </div>
 
         <div className="text-center">
-          <Link href="/tentang">
+          <Link href="/struktur">
             <Button variant="outline" size="lg">
               <Users className="h-4 w-4 mr-2" />
               Lihat Struktur Lengkap

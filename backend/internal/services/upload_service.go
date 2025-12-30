@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-func OptimizeImage(filepath string) (string, error) {
+func OptimizeImage(filePath string) (string, error) {
 	// Open image
-	file, err := os.Open(filepath)
+	file, err := os.Open(filePath)
 	if err != nil {
 		return "", err
 	}
@@ -25,8 +25,8 @@ func OptimizeImage(filepath string) (string, error) {
 	}
 
 	// Create optimized filename
-	ext := filepath.Ext(filepath)
-	optimizedPath := strings.TrimSuffix(filepath, ext) + "_optimized" + ext
+	ext := filepath.Ext(filePath)
+	optimizedPath := strings.TrimSuffix(filePath, ext) + "_optimized" + ext
 
 	// Create output file
 	out, err := os.Create(optimizedPath)
@@ -43,23 +43,23 @@ func OptimizeImage(filepath string) (string, error) {
 		encoder := &png.Encoder{CompressionLevel: png.BestCompression}
 		err = encoder.Encode(out, img)
 	default:
-		return filepath, nil // Return original if format not supported
+		return filePath, nil // Return original if format not supported
 	}
 
 	if err != nil {
-		return filepath, err // Return original if optimization fails
+		return filePath, err // Return original if optimization fails
 	}
 
 	// Replace original with optimized
-	if err := os.Rename(optimizedPath, filepath); err != nil {
-		return filepath, err
+	if err := os.Rename(optimizedPath, filePath); err != nil {
+		return filePath, err
 	}
 
-	return filepath, nil
+	return filePath, nil
 }
 
-func ValidateImage(filepath string) error {
-	file, err := os.Open(filepath)
+func ValidateImage(filePath string) error {
+	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to open file: %w", err)
 	}

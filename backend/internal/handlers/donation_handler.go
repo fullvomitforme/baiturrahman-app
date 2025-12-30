@@ -76,9 +76,10 @@ func (h *Handler) ConfirmDonation(c *gin.Context) {
 	}
 
 	userID, _ := c.Get("userID")
+	userUUID := userID.(uuid.UUID)
 	now := time.Now()
 	donation.Status = models.DonationStatusConfirmed
-	donation.ConfirmedBy = &userID.(uuid.UUID)
+	donation.ConfirmedBy = &userUUID
 	donation.ConfirmedAt = &now
 
 	if err := h.DB.Save(&donation).Error; err != nil {
@@ -100,7 +101,7 @@ func (h *Handler) GetDonationStats(c *gin.Context) {
 }
 
 func (h *Handler) ExportDonations(c *gin.Context) {
-	format := c.DefaultQuery("format", "excel")
+	_ = c.DefaultQuery("format", "excel") // TODO: Use format when implementing export
 	// TODO: Implement export functionality
 	utils.ErrorResponse(c, http.StatusNotImplemented, "Export functionality not yet implemented")
 }

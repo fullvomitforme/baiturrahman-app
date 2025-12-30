@@ -35,7 +35,9 @@ export function AnnouncementsSection() {
     queryKey: ["announcements", "active"],
     queryFn: async () => {
       const response = await api.get("/announcements?active=true&limit=5");
-      return response.data?.data || response.data || [];
+      // Handle both response formats: { data: [...] } or [...]
+      const data = response.data?.data || response.data;
+      return Array.isArray(data) ? data : [];
     },
   });
 
@@ -52,7 +54,7 @@ export function AnnouncementsSection() {
     );
   }
 
-  if (!announcements || announcements.length === 0) {
+  if (!announcements || !Array.isArray(announcements) || announcements.length === 0) {
     return null;
   }
 

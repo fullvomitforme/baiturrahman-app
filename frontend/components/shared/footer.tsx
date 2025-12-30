@@ -36,6 +36,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/struktur"
+                  className="text-white/80 hover:text-yellow-400 transition-colors"
+                >
+                  Struktur Organisasi
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/kegiatan"
                   className="text-white/80 hover:text-yellow-400 transition-colors"
                 >
@@ -52,7 +60,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/kegiatan"
+                  href="/jadwal"
                   className="text-white/80 hover:text-yellow-400 transition-colors"
                 >
                   Jadwal Sholat

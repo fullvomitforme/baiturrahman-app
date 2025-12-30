@@ -26,7 +26,7 @@ const contentSchema = z.object({
   body: z.string().min(1, "Body wajib diisi"),
   image_url: z.string().optional(),
   video_url: z.string().optional(),
-  is_active: z.boolean().default(true),
+  is_active: z.boolean(),
 });
 
 type ContentForm = z.infer<typeof contentSchema>;

@@ -117,87 +117,87 @@ export function PrayerTimesWidget() {
     : null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
-      className={cn(
-        "container-islamic px-4 py-6 transition-all duration-300",
-        isSticky && "sticky top-4 z-50"
-      )}
-    >
-      <Card className="bg-card/95 backdrop-blur-md border-2 shadow-xl">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="font-heading text-xl md:text-2xl flex items-center gap-2">
-              <Clock className="h-5 w-5 text-primary" />
-              Jadwal Sholat Hari Ini
-            </CardTitle>
-            <Badge variant="secondary" className="text-xs">
-              <MapPin className="h-3 w-3 mr-1" />
-              {prayerData?.location || "Jakarta"}
-            </Badge>
-          </div>
-          {nextPrayer && minutesUntilNext !== null && minutesUntilNext > 0 && (
-            <p className="text-sm text-muted-foreground mt-2">
-              Sholat {nextPrayer.name} dalam{" "}
-              <span className="font-bold text-primary">
-                {minutesUntilNext} menit
-              </span>
-            </p>
-          )}
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
-            {prayers.map((prayer, index) => {
-              const isNext =
-                nextPrayer?.name === prayer.name &&
-                minutesUntilNext !== null &&
-                minutesUntilNext > 0;
-              const isPast = prayer.datetime < currentTime;
+		<motion.div
+			initial={{ opacity: 0, y: 20 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, margin: '-100px' }}
+			transition={{ duration: 0.6 }}
+			className={cn(
+				'container-islamic px-4 py-6 transition-all duration-300',
+				isSticky && 'sticky top-20 z-50',
+			)}
+		>
+			<Card className='bg-card/95 backdrop-blur-md border-2 shadow-xl'>
+				<CardHeader className='pb-3'>
+					<div className='flex items-center justify-between'>
+						<CardTitle className='font-heading text-xl md:text-2xl flex items-center gap-2'>
+							<Clock className='h-5 w-5 text-primary' />
+							Jadwal Sholat Hari Ini
+						</CardTitle>
+						<Badge variant='secondary' className='text-xs'>
+							<MapPin className='h-3 w-3 mr-1' />
+							{prayerData?.location || 'Jakarta'}
+						</Badge>
+					</div>
+					{nextPrayer && minutesUntilNext !== null && minutesUntilNext > 0 && (
+						<p className='text-sm text-muted-foreground mt-2'>
+							Sholat {nextPrayer.name} dalam{' '}
+							<span className='font-bold text-primary'>
+								{minutesUntilNext} menit
+							</span>
+						</p>
+					)}
+				</CardHeader>
+				<CardContent>
+					<div className='grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4'>
+						{prayers.map((prayer, index) => {
+							const isNext =
+								nextPrayer?.name === prayer.name &&
+								minutesUntilNext !== null &&
+								minutesUntilNext > 0;
+							const isPast = prayer.datetime < currentTime;
 
-              return (
-                <motion.div
-                  key={prayer.name}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className={cn(
-                    "text-center p-4 rounded-lg border-2 transition-all",
-                    isNext
-                      ? "bg-primary/10 border-primary shadow-md scale-105"
-                      : isPast
-                      ? "bg-muted/50 border-muted opacity-60"
-                      : "bg-background border-border hover:border-primary/50"
-                  )}
-                >
-                  <p className="text-sm font-medium text-muted-foreground mb-2">
-                    {prayer.name}
-                  </p>
-                  <p
-                    className={cn(
-                      "text-2xl md:text-3xl font-bold",
-                      isNext ? "text-primary" : "text-foreground"
-                    )}
-                  >
-                    {prayer.time}
-                  </p>
-                  {isNext && (
-                    <Badge
-                      variant="default"
-                      className="mt-2 text-xs bg-primary"
-                    >
-                      Selanjutnya
-                    </Badge>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
+							return (
+								<motion.div
+									key={prayer.name}
+									initial={{ opacity: 0, scale: 0.9 }}
+									whileInView={{ opacity: 1, scale: 1 }}
+									viewport={{ once: true }}
+									transition={{ delay: index * 0.1 }}
+									className={cn(
+										'text-center p-4 rounded-lg border-2 transition-all',
+										isNext
+											? 'bg-primary/10 border-primary shadow-md scale-105'
+											: isPast
+											? 'bg-muted/50 border-muted opacity-60'
+											: 'bg-background border-border hover:border-primary/50',
+									)}
+								>
+									<p className='text-sm font-medium text-muted-foreground mb-2'>
+										{prayer.name}
+									</p>
+									<p
+										className={cn(
+											'text-2xl md:text-3xl font-bold',
+											isNext ? 'text-primary' : 'text-foreground',
+										)}
+									>
+										{prayer.time}
+									</p>
+									{isNext && (
+										<Badge
+											variant='default'
+											className='mt-2 text-xs bg-primary'
+										>
+											Selanjutnya
+										</Badge>
+									)}
+								</motion.div>
+							);
+						})}
+					</div>
+				</CardContent>
+			</Card>
+		</motion.div>
+	);
 }

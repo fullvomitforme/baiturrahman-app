@@ -59,7 +59,7 @@ export function DonationsByCategoryChart() {
                 cy="50%"
                 labelLine={false}
                 label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
+                  `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                 }
                 outerRadius={100}
                 fill="#8884d8"
@@ -78,8 +78,8 @@ export function DonationsByCategoryChart() {
                   border: "1px solid hsl(var(--border))",
                   borderRadius: "8px",
                 }}
-                formatter={(value: number) => [
-                  `Rp ${new Intl.NumberFormat("id-ID").format(value)}`,
+                formatter={(value: any) => [
+                  `Rp ${new Intl.NumberFormat("id-ID").format(typeof value === 'number' ? value : 0)}`,
                   "Total",
                 ]}
               />

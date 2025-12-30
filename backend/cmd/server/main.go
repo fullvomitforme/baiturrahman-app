@@ -31,6 +31,11 @@ func main() {
 		log.Fatal("Failed to run migrations:", err)
 	}
 
+	// Seed default admin user if not exists
+	if err := database.SeedDefaultAdmin(db); err != nil {
+		log.Printf("Warning: Failed to seed default admin: %v", err)
+	}
+
 	// Initialize Gin router
 	r := gin.Default()
 

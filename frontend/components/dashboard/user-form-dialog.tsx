@@ -33,9 +33,9 @@ const userSchema = z
     password: z.string().min(6, "Password minimal 6 karakter").optional(),
     password_confirmation: z.string().optional(),
     full_name: z.string().optional(),
-    role: z.enum(["admin", "editor", "super_admin"]).default("admin"),
+    role: z.enum(["admin", "editor", "super_admin"]),
     avatar_url: z.string().optional(),
-    is_active: z.boolean().default(true),
+    is_active: z.boolean(),
   })
   .refine(
     (data) => {

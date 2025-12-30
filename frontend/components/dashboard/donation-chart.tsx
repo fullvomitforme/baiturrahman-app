@@ -64,8 +64,8 @@ export function DonationChart() {
             border: "1px solid hsl(var(--border))",
             borderRadius: "8px",
           }}
-          formatter={(value: number) => [
-            `Rp ${value.toLocaleString("id-ID")}`,
+          formatter={(value: any) => [
+            `Rp ${(typeof value === 'number' ? value : 0).toLocaleString("id-ID")}`,
             "Total",
           ]}
         />

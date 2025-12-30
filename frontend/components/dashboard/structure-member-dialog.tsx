@@ -27,8 +27,8 @@ const memberSchema = z.object({
   bio: z.string().optional(),
   email: z.string().email("Email tidak valid").optional().or(z.literal("")),
   phone: z.string().optional(),
-  display_order: z.number().default(0),
-  is_active: z.boolean().default(true),
+  display_order: z.number(),
+  is_active: z.boolean(),
 });
 
 type MemberForm = z.infer<typeof memberSchema>;

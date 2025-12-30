@@ -30,11 +30,11 @@ import { toast } from "sonner";
 const announcementSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
   content: z.string().min(10, "Konten minimal 10 karakter"),
-  priority: z.enum(["high", "medium", "low"]).default("medium"),
+  priority: z.enum(["high", "medium", "low"]),
   category: z.string().optional(),
   published_at: z.string().optional(),
   expires_at: z.string().optional(),
-  is_pinned: z.boolean().default(false),
+  is_pinned: z.boolean(),
   image_url: z.string().optional(),
 });
 

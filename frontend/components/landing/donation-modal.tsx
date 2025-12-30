@@ -18,10 +18,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Heart, Copy, Check } from "lucide-react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import QRCode from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 const donationSchema = z.object({
   donor_name: z.string().min(2, "Nama minimal 2 karakter"),
@@ -44,7 +51,9 @@ export function DonationModal() {
     queryKey: ["payment-methods"],
     queryFn: async () => {
       const response = await api.get("/payment-methods?active=true");
-      return response.data || [];
+      // Handle both response formats: { data: [...] } or [...]
+      const data = response.data?.data || response.data;
+      return Array.isArray(data) ? data : [];
     },
     enabled: open,
   });
@@ -55,12 +64,16 @@ export function DonationModal() {
     formState: { errors, isSubmitting },
     reset,
     watch,
+    setValue,
   } = useForm<DonationForm>({
     resolver: zodResolver(donationSchema),
     defaultValues: {
       category: "infaq",
     },
   });
+
+  const category = watch("category");
+  const paymentMethodId = watch("payment_method_id");
 
   const onSubmit = async (data: DonationForm) => {
     try {
@@ -85,7 +98,9 @@ export function DonationModal() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const activeMethods = paymentMethods?.filter((m: any) => m.is_active) || [];
+  const activeMethods = Array.isArray(paymentMethods) 
+    ? paymentMethods.filter((m: any) => m.is_active) 
+    : [];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -95,12 +110,12 @@ export function DonationModal() {
           Donasi Sekarang
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="font-heading text-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto sm:rounded-2xl">
+        <DialogHeader className="space-y-2 pb-4 border-b">
+          <DialogTitle className="font-heading text-3xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
             Donasi untuk Masjid
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-base">
             Bantu pengembangan dan kegiatan Masjid Baiturrahim
           </DialogDescription>
         </DialogHeader>
@@ -111,8 +126,8 @@ export function DonationModal() {
             <TabsTrigger value="payment">Metode Pembayaran</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="form" className="space-y-4">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <TabsContent value="form" className="space-y-6 mt-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="donor_name">Nama Donatur *</Label>
                 <Input
@@ -171,34 +186,48 @@ export function DonationModal() {
 
               <div className="space-y-2">
                 <Label htmlFor="category">Kategori Donasi *</Label>
-                <select
-                  id="category"
-                  {...register("category")}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                <Select
+                  value={category}
+                  onValueChange={(value) => setValue("category", value as any)}
                 >
-                  <option value="infaq">Infaq</option>
-                  <option value="sedekah">Sedekah</option>
-                  <option value="zakat">Zakat</option>
-                  <option value="wakaf">Wakaf</option>
-                  <option value="operasional">Operasional</option>
-                </select>
+                  <SelectTrigger id="category" className="h-11">
+                    <SelectValue placeholder="Pilih kategori donasi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="infaq">Infaq</SelectItem>
+                    <SelectItem value="sedekah">Sedekah</SelectItem>
+                    <SelectItem value="zakat">Zakat</SelectItem>
+                    <SelectItem value="wakaf">Wakaf</SelectItem>
+                    <SelectItem value="operasional">Operasional</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.category && (
+                  <p className="text-sm text-destructive">
+                    {errors.category.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="payment_method_id">Metode Pembayaran</Label>
-                <select
-                  id="payment_method_id"
-                  {...register("payment_method_id")}
-                  onChange={(e) => setSelectedMethod(e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                <Select
+                  value={paymentMethodId || undefined}
+                  onValueChange={(value) => {
+                    setValue("payment_method_id", value);
+                    setSelectedMethod(value);
+                  }}
                 >
-                  <option value="">Pilih metode pembayaran</option>
-                  {activeMethods.map((method: any) => (
-                    <option key={method.id} value={method.id}>
-                      {method.name}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="payment_method_id" className="h-11">
+                    <SelectValue placeholder="Pilih metode pembayaran (opsional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activeMethods.map((method: any) => (
+                      <SelectItem key={method.id} value={method.id}>
+                        {method.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
@@ -213,7 +242,7 @@ export function DonationModal() {
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 font-semibold text-base"
                 size="lg"
                 disabled={isSubmitting}
               >
@@ -222,7 +251,7 @@ export function DonationModal() {
             </form>
           </TabsContent>
 
-          <TabsContent value="payment" className="space-y-4">
+          <TabsContent value="payment" className="space-y-6 mt-6">
             {isLoading ? (
               <div className="space-y-4">
                 {[...Array(2)].map((_, i) => (
@@ -238,7 +267,7 @@ export function DonationModal() {
                 {activeMethods.map((method: any) => (
                   <div
                     key={method.id}
-                    className="border rounded-lg p-4 space-y-4"
+                    className="border-2 rounded-xl p-6 space-y-4 bg-card hover:border-primary/30 transition-colors shadow-sm"
                   >
                     <h3 className="font-heading text-lg font-semibold">
                       {method.name}
@@ -247,7 +276,7 @@ export function DonationModal() {
                     {method.type === "qris" && method.qr_code_url && (
                       <div className="flex justify-center">
                         <div className="bg-white p-4 rounded-lg">
-                          <QRCode value={method.qr_code_url} size={200} />
+                          <QRCodeCanvas value={method.qr_code_url} size={200} />
                         </div>
                       </div>
                     )}

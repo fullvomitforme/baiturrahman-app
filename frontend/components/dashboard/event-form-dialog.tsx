@@ -38,8 +38,8 @@ const eventSchema = z.object({
   location: z.string().optional(),
   image_url: z.string().optional(),
   max_participants: z.number().optional(),
-  registration_required: z.boolean().default(false),
-  status: z.enum(["upcoming", "ongoing", "completed", "cancelled"]).default("upcoming"),
+  registration_required: z.boolean(),
+  status: z.enum(["upcoming", "ongoing", "completed", "cancelled"]),
 });
 
 type EventForm = z.infer<typeof eventSchema>;

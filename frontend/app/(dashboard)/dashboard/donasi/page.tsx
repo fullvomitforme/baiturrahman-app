@@ -169,104 +169,106 @@ export default function DonasiPage() {
     : [];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-heading text-3xl font-bold">Donasi</h1>
-        <p className="text-muted-foreground mt-1">
-          Kelola donasi masjid
-        </p>
-      </div>
+		<div className='space-y-6'>
+			<div>
+				<h1 className='font-heading text-3xl font-bold'>Donasi</h1>
+				<p className='text-muted-foreground mt-1'>Kelola donasi masjid</p>
+			</div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatsCard
-          title="Total Donasi"
-          value={`Rp ${(stats?.total_amount || 0).toLocaleString("id-ID")}`}
-          icon={DollarSign}
-        />
-        <StatsCard
-          title="Pending"
-          value={(stats?.pending_count || 0).toString()}
-          icon={Clock}
-        />
-        <StatsCard
-          title="Terkonfirmasi"
-          value={(stats?.confirmed_count || 0).toString()}
-          icon={CheckCircle}
-        />
-        <StatsCard
-          title="Total Transaksi"
-          value={(stats?.total_count || 0).toString()}
-          icon={DollarSign}
-        />
-      </div>
+			{/* Stats */}
+			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+				<StatsCard
+					title='Total Donasi'
+					value={`Rp ${(stats?.total_amount || 0).toLocaleString('id-ID')}`}
+					icon={DollarSign}
+				/>
+				<StatsCard
+					title='Pending'
+					value={(stats?.pending_count || 0).toString()}
+					icon={Clock}
+				/>
+				<StatsCard
+					title='Terkonfirmasi'
+					value={(stats?.confirmed_count || 0).toString()}
+					icon={CheckCircle}
+				/>
+				<StatsCard
+					title='Total Transaksi'
+					value={(stats?.total_count || 0).toString()}
+					icon={DollarSign}
+				/>
+			</div>
 
-      {/* Chart */}
-      {chartData.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-heading">Donasi per Kategori</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number) =>
-                    `Rp ${value.toLocaleString("id-ID")}`
-                  }
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      )}
+			{/* Chart */}
+			{chartData.length > 0 && (
+				<Card>
+					<CardHeader>
+						<CardTitle className='font-heading'>Donasi per Kategori</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<ResponsiveContainer width='100%' height={300}>
+							<PieChart>
+								<Pie
+									data={chartData}
+									cx='50%'
+									cy='50%'
+									labelLine={false}
+									label={({ name, percent }) =>
+										`${name} ${((percent ?? 0) * 100).toFixed(0)}%`
+									}
+									outerRadius={80}
+									fill='#8884d8'
+									dataKey='value'
+								>
+									{chartData.map((entry, index) => (
+										<Cell
+											key={`cell-${index}`}
+											fill={COLORS[index % COLORS.length]}
+										/>
+									))}
+								</Pie>
+								<Tooltip
+									formatter={(value: any) => [
+										`Rp ${(typeof value === 'number'
+											? value
+											: 0
+										).toLocaleString('id-ID')}`,
+										'Total',
+									]}
+								/>
+								<Legend />
+							</PieChart>
+						</ResponsiveContainer>
+					</CardContent>
+				</Card>
+			)}
 
-      {/* Table */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-heading text-xl font-semibold">Daftar Donasi</h2>
-        <Button variant="outline" size="sm">
-          <Download className="h-4 w-4 mr-2" />
-          Export
-        </Button>
-      </div>
+			{/* Table */}
+			<div className='flex items-center justify-between'>
+				<h2 className='font-heading text-xl font-semibold'>Daftar Donasi</h2>
+				<Button variant='outline' size='sm'>
+					<Download className='h-4 w-4 mr-2' />
+					Export
+				</Button>
+			</div>
 
-      {donations && (
-        <DataTable
-          columns={columns}
-          data={donations}
-          searchKey="donor_name"
-          searchPlaceholder="Cari donatur..."
-        />
-      )}
+			{donations && (
+				<DataTable
+					columns={columns}
+					data={donations}
+					searchKey='donor_name'
+					searchPlaceholder='Cari donatur...'
+				/>
+			)}
 
-      <ConfirmDonationDialog
-        open={!!confirmingDonation}
-        onOpenChange={(open) => !open && setConfirmingDonation(null)}
-        donation={confirmingDonation}
-        onConfirm={() =>
-          confirmingDonation && confirmMutation.mutate(confirmingDonation.id)
-        }
-      />
-    </div>
-  );
+			<ConfirmDonationDialog
+				open={!!confirmingDonation}
+				onOpenChange={(open) => !open && setConfirmingDonation(null)}
+				donation={confirmingDonation}
+				onConfirm={() =>
+					confirmingDonation && confirmMutation.mutate(confirmingDonation.id)
+				}
+			/>
+		</div>
+	);
 }

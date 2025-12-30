@@ -23,7 +23,9 @@ export function UpcomingEvents() {
     queryKey: ["events", "upcoming"],
     queryFn: async () => {
       const response = await api.get("/events?status=upcoming&limit=6");
-      return response.data?.data || response.data || [];
+      // Handle both response formats: { data: [...] } or [...]
+      const data = response.data?.data || response.data;
+      return Array.isArray(data) ? data : [];
     },
   });
 
@@ -45,7 +47,7 @@ export function UpcomingEvents() {
     );
   }
 
-  if (!events || events.length === 0) {
+  if (!events || !Array.isArray(events) || events.length === 0) {
     return (
       <section className="container-islamic section-spacing">
         <motion.div

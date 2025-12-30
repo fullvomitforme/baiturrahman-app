@@ -142,7 +142,7 @@ export function EventsDataTable({
       <DataTable columns={columns} data={filteredEvents} />
       <ConfirmDialog
         open={!!deleteId}
-        onClose={() => setDeleteId(null)}
+        onOpenChange={(open) => !open && setDeleteId(null)}
         onConfirm={() => deleteId && deleteMutation.mutate(deleteId)}
         title="Hapus Kegiatan"
         description="Apakah Anda yakin ingin menghapus kegiatan ini?"

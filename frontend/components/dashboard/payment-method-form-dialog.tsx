@@ -35,8 +35,8 @@ const paymentMethodSchema = z.object({
   instructions: z.string().optional(),
   logo_url: z.string().optional(),
   qr_code_url: z.string().optional(),
-  display_order: z.number().default(0),
-  is_active: z.boolean().default(true),
+  display_order: z.number(),
+  is_active: z.boolean(),
 });
 
 type PaymentMethodForm = z.infer<typeof paymentMethodSchema>;

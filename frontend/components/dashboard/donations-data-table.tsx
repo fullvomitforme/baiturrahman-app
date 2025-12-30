@@ -126,9 +126,13 @@ export function DonationsDataTable({
       {confirmingId && (
         <ConfirmDonationDialog
           open={!!confirmingId}
-          onClose={() => setConfirmingId(null)}
-          donationId={confirmingId}
-          onConfirm={() => confirmMutation.mutate(confirmingId)}
+          onOpenChange={(open) => !open && setConfirmingId(null)}
+          donation={donations.find((d) => d.id === confirmingId)}
+          onConfirm={() => {
+            if (confirmingId) {
+              confirmMutation.mutate(confirmingId);
+            }
+          }}
         />
       )}
     </>

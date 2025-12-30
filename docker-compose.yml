@@ -1,19 +1,17 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: masjid-postgres
+    container_name: postgres_container
     environment:
-      POSTGRES_USER: masjid_user
-      POSTGRES_PASSWORD: masjid_password
-      POSTGRES_DB: masjid_db
+      POSTGRES_USER: heulasuser
+      POSTGRES_PASSWORD: heulaspassword
+      POSTGRES_DB: baiturrahim_app
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U masjid_user"]
+      test: ["CMD-SHELL", "pg_isready -U heulasuser"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,10 +20,10 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: masjid-backend
+    container_name: baiturrahim_backend
     environment:
       PORT: 8080
-      DATABASE_URL: postgres://masjid_user:masjid_password@postgres:5432/masjid_db?sslmode=disable
+      DATABASE_URL: postgres://heulasuser:heulaspassword@postgres:5432/baiturrahim_app?sslmode=disable
       JWT_SECRET: your-secret-key-change-in-production
       FRONTEND_URL: http://localhost:3000
     ports:
@@ -41,7 +39,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: masjid-frontend
+    container_name: baiturrahim_frontend
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8080/api
     ports:
