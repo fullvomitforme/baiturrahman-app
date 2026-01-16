@@ -3,8 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@custom-variant dark (&:is(.dark *));
-
 @theme {
   --font-sans: var(--font-plus-jakarta-sans), system-ui, sans-serif;
 
